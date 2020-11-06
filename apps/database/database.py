@@ -1,5 +1,6 @@
 import sqlite3
 import bcrypt
+from datetime import datetime
 
 
 class Database:
@@ -45,6 +46,14 @@ class Database:
             """
         )
 
+    def add_user(self, values):
+        salt = bcrypt.gensalt()
+        values[1] = bcrypt.hashpw(bytes(values[1], encoding='ascii'), salt)
+        values.append(datetime.now())
+        sql = "INSERT INTO users(username, password, signup_date) VALUES(?, ?, ?)"
+        self.cur.execute(sql, values)
+        self.conn.commit()
+
     def add_row(self, values):
         """
         :param values:  list of values to add in the db:
@@ -52,25 +61,41 @@ class Database:
         values[1] => app name
         values[2] => pseudo for the app
         values[3] => password for the app
-        values[4] => datetime
+        values[4] => datetime // Added in this function
         :return: the id of the row added
         """
         salt = bcrypt.gensalt()  # gen a salt for the hash
         values[3] = bcrypt.hashpw(bytes(values[3], encoding='ascii'), salt)  # hash the password
+        values.append(datetime.now())
         sql = "INSERT INTO password(username, app, pseudo, password, added_date) VALUES(?, ?, ?, ?, ?)"
         self.cur.execute(sql, values)
         self.conn.commit()  # store and save the row in the database
 
         return self.cur.lastrowid
 
+    def connection_user(self, username, pwd):
+        sql = "SELECT * FROM users WHERE username=?"
+        self.cur.execute(sql, (username, ))
+        row = self.cur.fetchone()
+        if row is not None:
+            password = row[2]
+            if bcrypt.checkpw(bytes(pwd, encoding='ascii'), password):
+                return True
+            else:
+                return False
+        else:
+            return False
+
     def print_by_user(self, user):
-        sql = "SELECT * FROM password WHERE username=?"
+
+        sql = "SELECT * FROM users WHERE username=?"
         self.cur.execute(sql, (user, ))
-
-        rows = self.cur.fetchall()
-        for row in rows:
-            print(row)
-
+        row = self.cur.fetchone()
+        if row is not None:
+            return row
+        else:
+            return False
+        
     def print_row(self, app="", pseudo=""):
         """
 
@@ -110,7 +135,7 @@ class Database:
             if row is not None:
                 return row
             else:
-                print("Aucune ligné trouvée")
+                print("Aucune ligne trouvée")
 
     def update_row(self, ids, pseudo="", password=""):
         """
@@ -134,7 +159,7 @@ class Database:
             password = bcrypt.hashpw(bytes(password, encoding='ascii'), salt)
             self.cur.execute(sql, (pseudo, password, ids,))
         self.conn.commit()
-        print("Ligne modifié correctement.")
+        print("Ligne modifiée correctement.")
 
     def delete_row(self, ids):
         """
@@ -145,4 +170,5 @@ class Database:
         sql = "DELETE FROM password WHERE id=?"
         self.cur.execute(sql, (ids,))
         self.conn.commit()
-        print("Lignée supprimé correctement")
+        print("Lignée supprimée correctement")
+

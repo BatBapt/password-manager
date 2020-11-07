@@ -10,7 +10,6 @@ class Database:
         try:
             self.conn = sqlite3.connect(self.database_name)
             self.cur = self.conn.cursor()
-            print("Connecté à la base de donnée")
         except sqlite3.Error as error:
             print("Erreur lors de la connection à la base de donnée: {}".format(error))
 
@@ -36,10 +35,9 @@ class Database:
             CREATE TABLE IF NOT EXISTS password(
                 id INTEGER PRIMARY KEY,
                 username VARCHAR(100) NOT NULL,
-                app VARCHAR(100) NOT NULL,
-                pseudo VARCHAR(100) NOT NULL,
+                app VARCHAR(255) NOT NULL,
+                pseudo VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL,
-                added_date DATETIME NOT NULL,
                 
                 FOREIGN KEY (username) REFERENCES users(username)
             )
@@ -66,8 +64,7 @@ class Database:
         """
         salt = bcrypt.gensalt()  # gen a salt for the hash
         values[3] = bcrypt.hashpw(bytes(values[3], encoding='ascii'), salt)  # hash the password
-        values.append(datetime.now())
-        sql = "INSERT INTO password(username, app, pseudo, password, added_date) VALUES(?, ?, ?, ?, ?)"
+        sql = "INSERT INTO password(username, app, pseudo, password) VALUES(?, ?, ?, ?)"
         self.cur.execute(sql, values)
         self.conn.commit()  # store and save the row in the database
 
@@ -87,7 +84,6 @@ class Database:
             return False
 
     def print_by_user(self, user):
-
         sql = "SELECT * FROM users WHERE username=?"
         self.cur.execute(sql, (user, ))
         row = self.cur.fetchone()

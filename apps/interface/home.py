@@ -6,6 +6,7 @@ from apps.database import database
 
 import apps.interface.login as login
 import apps.interface.add_password as add_password
+import apps.interface.list_password as list_password
 
 
 class Home(tk.Frame):
@@ -68,7 +69,7 @@ class Home(tk.Frame):
         btn_list = ['Ajouter mot de passe', 'Lister les mots de passe', 'Chercher un mot de passe']
         btn_command_list = [
             lambda: self.add_password(master_root=self.master, user=self.pseudo),
-            self.master.destroy,
+            lambda: self.list_password(master_root=self.master, user=self.pseudo),
             self.master.destroy
         ]
         tmp_list = []
@@ -91,4 +92,11 @@ class Home(tk.Frame):
         self.main_frame.destroy()
         self.img_frame.destroy()
         add_password.AddPassword(master_root, user)
+
+    def list_password(self, **kwargs):
+        master_root = kwargs["master_root"]
+        user = kwargs["user"]
+        self.main_frame.destroy()
+        self.img_frame.destroy()
+        list_password.ListPassword(master_root, user)
 

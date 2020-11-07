@@ -88,7 +88,4 @@ class AddPassword(tk.Frame):
                 self.database.add_row(row)
 
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = AddPassword(root, 'Baptiste')
-    app.mainloop()
+

@@ -2,7 +2,7 @@ import tkinter as tk
 
 from apps.database import database
 
-from apps.interface.home import Home
+import apps.interface.home as home
 
 
 class Login(tk.Frame):
@@ -48,4 +48,4 @@ class Login(tk.Frame):
 
         if is_connected:
             self.login_frame.destroy()
-            Home(self.master, user)
+            home.Home(self.master, user)

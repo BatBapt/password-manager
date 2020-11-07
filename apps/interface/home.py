@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 from apps.database import database
 
 import apps.interface.login as login
+import apps.interface.add_password as add_password
 
 
 class Home(tk.Frame):
@@ -65,7 +66,11 @@ class Home(tk.Frame):
 
     def gen_btn(self):
         btn_list = ['Ajouter mot de passe', 'Lister les mots de passe', 'Chercher un mot de passe']
-        btn_command_list = [self.master.destroy, self.master.destroy, self.master.destroy]
+        btn_command_list = [
+            lambda: self.add_password(master_root=self.master, user=self.pseudo),
+            self.master.destroy,
+            self.master.destroy
+        ]
         tmp_list = []
         aux = 100
 
@@ -80,9 +85,10 @@ class Home(tk.Frame):
             self.img_frame.destroy()
             login.Login(self.master)
 
+    def add_password(self, **kwargs):
+        master_root = kwargs["master_root"]
+        user = kwargs["user"]
+        self.main_frame.destroy()
+        self.img_frame.destroy()
+        add_password.AddPassword(master_root, user)
 
-if __name__ == '__main__':
-
-    root = tk.Tk()
-    app = Home(root, 'Baptiste')
-    app.mainloop()

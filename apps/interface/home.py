@@ -1,7 +1,10 @@
 import tkinter as tk
+from tkinter import messagebox
 from PIL import Image, ImageTk
 
 from apps.database import database
+
+import apps.interface.login as login
 
 
 class Home(tk.Frame):
@@ -71,7 +74,11 @@ class Home(tk.Frame):
             tmp_list[i].pack(side=tk.LEFT, padx=45)
 
     def deconnect(self):
-        print("here")
+        msg_box = messagebox.askquestion('Déconnection', 'Êtes-vous sur de vous déconnecter?', icon='warning')
+        if msg_box == "yes":
+            self.main_frame.destroy()
+            self.img_frame.destroy()
+            login.Login(self.master)
 
 
 if __name__ == '__main__':

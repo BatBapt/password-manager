@@ -62,8 +62,6 @@ class Database:
         values[4] => datetime // Added in this function
         :return: the id of the row added
         """
-        salt = bcrypt.gensalt()  # gen a salt for the hash
-        values[3] = bcrypt.hashpw(bytes(values[3], encoding='ascii'), salt)  # hash the password
         sql = "INSERT INTO password(username, app, pseudo, password) VALUES(?, ?, ?, ?)"
         self.cur.execute(sql, values)
         self.conn.commit()  # store and save the row in the database
@@ -92,46 +90,21 @@ class Database:
         else:
             return False
         
-    def print_row(self, app="", pseudo=""):
-        """
+    def print_row(self, username):
+        sql = "SELECT * FROM password WHERE username=?"
+        self.cur.execute(sql, (username, ))
 
-        :param app: name of the app to look
-        :param pseudo: pseudo to look
-        :return: the row binded
-        """
-        if len(app) == 0 and len(pseudo) > 0:
-            sql = "SELECT * FROM password WHERE pseudo=?"
-            has_many_row = True
-            self.cur.execute(sql, (pseudo, ))
-        elif len(app) > 0 and len(pseudo) == 0:
-            sql = "SELECT * FROM password WHERE app=?"
-            has_many_row = True
-            self.cur.execute(sql, (app, ))
-        elif len(app) > 0 and len(pseudo) > 0:
-            sql = "SELECT * FROM password WHERE app=? and pseudo=?"
-            has_many_row = False
-            self.cur.execute(sql, (app, pseudo, ))
+        rows = self.cur.fetchall()
+        if rows is not None:
+            return rows
         else:
-            sql = "SELECT * FROM password"
-            has_many_row = True
-            self.cur.execute(sql)
+            return False
 
-        if has_many_row:
-            rows = self.cur.fetchall()
-            rows_returned = []
-            if len(rows) != 0:
-                for row in rows:
-                    rows_returned.append(row)
-                return rows_returned
-
-            else:
-                print("Aucune lignée trouvée")
-        else:
-            row = self.cur.fetchone()
-            if row is not None:
-                return row
-            else:
-                print("Aucune ligne trouvée")
+    def print_row_by_id(self, ids):
+        sql = "SELECT * FROM password WHERE id=?"
+        self.cur.execute(sql, (ids, ))
+        row = self.cur.fetchone()
+        return row
 
     def update_row(self, ids, pseudo="", password=""):
         """
@@ -142,8 +115,6 @@ class Database:
         :return:
         """
         if len(pseudo) == 0 and len(password) > 0:
-            salt = bcrypt.gensalt()
-            password = bcrypt.hashpw(bytes(password, encoding='ascii'), salt)
             sql = "UPDATE password set password=? WHERE id=?"
             self.cur.execute(sql, (password, ids, ))
         elif len(pseudo) > 0 and len(password) == 0:
@@ -151,8 +122,6 @@ class Database:
             self.cur.execute(sql, (pseudo, ids,))
         elif len(pseudo) > 0 and len(password) > 0:
             sql = "UPDATE password set pseudo=? AND password=? WHERE id=?"
-            salt = bcrypt.gensalt()
-            password = bcrypt.hashpw(bytes(password, encoding='ascii'), salt)
             self.cur.execute(sql, (pseudo, password, ids,))
         self.conn.commit()
         print("Ligne modifiée correctement.")

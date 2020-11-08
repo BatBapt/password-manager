@@ -37,6 +37,11 @@ class AddPassword(tk.Frame):
         self.line_frame.pack()
 
         self.file_state = tk.Label(self.csv_frame, text="")
+        self.line_state = tk.Label(self.line_frame, text="")
+
+        self.entry_app = tk.Entry(self.line_frame)
+        self.entry_user = tk.Entry(self.line_frame)
+        self.entry_pwd = tk.Entry(self.line_frame, show="*")
 
         self.gen_csv()
         self.gen_inline()
@@ -58,8 +63,50 @@ class AddPassword(tk.Frame):
         self.file_state.pack(side=tk.TOP, padx=(0, 210), pady=(20, 0))
 
     def gen_inline(self):
-        label_inline = tk.Label(self.line_frame, text="test depuis CSV")
-        label_inline.pack(side=tk.TOP, padx=(210, 0))
+        label_inline = tk.Label(self.line_frame, text="Entrer à la main")
+        label_inline.pack(side=tk.TOP, padx=(0, 150))
+
+        label_app = tk.Label(self.line_frame, text="Application: ")
+        label_app.pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
+
+        self.entry_app.pack(side=tk.TOP, padx=(0, 150))
+
+        label_user = tk.Label(self.line_frame, text="Pseudo: ")
+        label_user.pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
+
+        self.entry_user.pack(side=tk.TOP, padx=(0, 150))
+
+        label_pwd = tk.Label(self.line_frame, text="Mot de passe: ")
+        label_pwd.pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
+
+        self.entry_pwd.pack(side=tk.TOP, padx=(0, 150))
+
+        btn = tk.Button(self.line_frame, text="Enregistrer le mot de passe", width=40, command=lambda: self.treatment(
+            app=self.entry_app,
+            name=self.entry_user,
+            pwd=self.entry_pwd,
+        ))
+        btn.pack(side=tk.TOP, padx=(0, 150), pady=(20, 20))
+
+        self.line_frame.bind_all('<Return>', lambda event: self.treatment(
+            app=self.entry_app,
+            name=self.entry_user,
+            pwd=self.entry_pwd,
+        ))
+
+    def treatment(self, event=None, **kwargs):
+        app = kwargs['app'].get()
+        name = kwargs['name'].get()
+        pwd = kwargs['pwd'].get()
+
+        if len(app) > 0 and len(name) > 0 and len(pwd) > 0:
+            self.is_good = True
+            values = [self.username, app, name, pwd]
+
+            self.add_in_database(values, is_csv=False)
+        else:
+            self.line_state["text"] = "Un champ est manquant"
+            self.line_state.pack(side=tk.TOP, padx=(0, 150), pady=(20, 20))
 
     def open_file(self):
         self.csv_file = tk.filedialog.askopenfilename(initialdir="/", title="Ouvrir CSV", filetypes=(("CSV Files","*.csv"),))
@@ -80,11 +127,26 @@ class AddPassword(tk.Frame):
             else:
                 self.file_state.configure(text="Erreur lors de l'import: les colonnes ont un mauvais nom")
 
-    def add_in_database(self, values):
+    def add_in_database(self, values, is_csv=True):
         if self.is_good:
-            for row in values:
-                row.insert(0, self.username)
-                self.database.add_row(row)
+            if is_csv:
+                for row in values:
+                    row.insert(0, self.username)
+                    self.database.add_row(row)
+
+                    self.file_state.configure(text="Les lignes ont été importée correctement")
+            else:
+                self.database.add_row(values)
+                self.line_state.configure(text="Mot de passe enregistrée")
+                self.line_state.pack(side=tk.TOP, padx=(0, 150), pady=(20, 20))
+
+                self.entry_app.delete(0, 'end')
+                self.entry_user.delete(0, 'end')
+                self.entry_pwd.delete(0, 'end')
 
 
 
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = AddPassword(root, 'Baptiste')
+    app.mainloop()

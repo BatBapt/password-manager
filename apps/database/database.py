@@ -65,7 +65,6 @@ class Database:
         sql = "INSERT INTO password(username, app, pseudo, password) VALUES(?, ?, ?, ?)"
         self.cur.execute(sql, values)
         self.conn.commit()  # store and save the row in the database
-        print("Ligne enregistrée")
         return self.cur.lastrowid
 
     def connection_user(self, username, pwd):

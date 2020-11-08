@@ -45,7 +45,6 @@ class SearchPassword(tk.Frame):
 
     def back_home(self):
         self.frame.destroy()
-        print(self.username)
         home.Home(self.master, self.username)
 
     def gen_form_search_by_app(self):

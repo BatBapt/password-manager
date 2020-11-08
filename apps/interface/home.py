@@ -5,8 +5,9 @@ from PIL import Image, ImageTk
 from apps.database import database
 
 import apps.interface.login as login
-import apps.interface.add_password as add_password
-import apps.interface.list_password as list_password
+import apps.interface.add_password as add
+import apps.interface.list_password as list
+import apps.interface.search_password as search
 
 
 class Home(tk.Frame):
@@ -70,7 +71,7 @@ class Home(tk.Frame):
         btn_command_list = [
             lambda: self.add_password(master_root=self.master, user=self.pseudo),
             lambda: self.list_password(master_root=self.master, user=self.pseudo),
-            self.master.destroy
+            lambda: self.search_password(master_root=self.master, user=self.pseudo),
         ]
         tmp_list = []
         aux = 100
@@ -91,12 +92,19 @@ class Home(tk.Frame):
         user = kwargs["user"]
         self.main_frame.destroy()
         self.img_frame.destroy()
-        add_password.AddPassword(master_root, user)
+        add.AddPassword(master_root, user)
 
     def list_password(self, **kwargs):
         master_root = kwargs["master_root"]
         user = kwargs["user"]
         self.main_frame.destroy()
         self.img_frame.destroy()
-        list_password.ListPassword(master_root, user)
+        list.ListPassword(master_root, user)
+
+    def search_password(self, **kwargs):
+        master_root = kwargs["master_root"]
+        user = kwargs["user"]
+        self.main_frame.destroy()
+        self.img_frame.destroy()
+        search.SearchPassword(master_root, user)
 

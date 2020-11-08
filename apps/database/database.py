@@ -100,6 +100,18 @@ class Database:
         else:
             return False
 
+    def search_by_app(self, app):
+        sql = "SELECT * FROM password WHERE app LIKE '%'||?||'%'"
+        self.cur.execute(sql, (app, ))
+        rows = self.cur.fetchall()
+        return rows
+
+    def search_by_pseudo(self, pseudo):
+        sql = "SELECT * FROM password WHERE pseudo LIKE '%'||?||'%'"
+        self.cur.execute(sql, (pseudo, ))
+        rows = self.cur.fetchall()
+        return rows
+
     def print_row_by_id(self, ids):
         sql = "SELECT * FROM password WHERE id=?"
         self.cur.execute(sql, (ids, ))
@@ -136,4 +148,3 @@ class Database:
         self.cur.execute(sql, (ids,))
         self.conn.commit()
         print("Lignée supprimée correctement")
-

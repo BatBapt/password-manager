@@ -87,11 +87,5 @@ class ListPassword(tk.Frame):
             self.refresh()
 
     def refresh(self):
-        # self.master.destroy()
         self.__init__(self.master, self.username)
 
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = ListPassword(root, 'Baptiste')
-    app.mainloop()

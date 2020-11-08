@@ -17,8 +17,11 @@ class Home(tk.Frame):
     def __init__(self, master, username):
         self.master = master
 
+        for widget in self.master.winfo_children():
+            widget.destroy()
+
         self.username = username
-        self.database = database.Database("../password.db")
+        self.database = database.Database("password.db")
         self.username = self.database.print_by_user(self.username)
         self.pseudo = self.username[1]
 
@@ -60,7 +63,7 @@ class Home(tk.Frame):
         canvas_list = [self.add_canv, self.list_canv, self.search_canv]
 
         for i in range(3):
-            img = Image.open("../../assets/" + img_list[i])
+            img = Image.open("assets/" + img_list[i])
             img = img.resize((300, 250), Image.ANTIALIAS)
             photo = ImageTk.PhotoImage(img)
             canvas_list[i].create_image(0, 0, anchor=tk.NW, image=photo)

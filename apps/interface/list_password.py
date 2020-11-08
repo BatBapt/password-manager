@@ -18,7 +18,7 @@ class ListPassword(tk.Frame):
 
         self.username = username
 
-        self.database = database.Database("../password.db")
+        self.database = database.Database("password.db")
         self.master.title("Password Manager: Lister les mots de passe")
         self.master.geometry("900x450+300+100")
 

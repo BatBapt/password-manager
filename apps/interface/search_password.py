@@ -13,8 +13,10 @@ class SearchPassword(tk.Frame):
         tk.Frame.__init__(self, master)
 
         self.master = master
+        for widget in self.master.winfo_children():
+            widget.destroy()
         self.username = username
-        self.database = database.Database("../password.db")
+        self.database = database.Database("password.db")
 
         self.master.title("Password Manager: Chercher un mot de passe")
         self.master.geometry("900x450+300+100")

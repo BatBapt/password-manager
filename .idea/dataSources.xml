@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="password" uuid="b0a59c06-1089-4efe-a460-4a02b2fd2dfe">
+    <data-source source="LOCAL" name="password" uuid="593b829e-b1fd-46a6-86a3-8469f84d9d3f">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\pyCharm\password-manager\apps\password.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\pyCharm\password-manager\dist\password.db</jdbc-url>
       <libraries>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/license.txt</url>

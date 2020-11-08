@@ -19,7 +19,7 @@ class AddPassword(tk.Frame):
         self.master = master
         self.username = username
 
-        self.database = database.Database("../password.db")
+        self.database = database.Database("password.db")
 
         self.master.title("Password Manager: Ajouter des Mots de passe")
         self.master.geometry("900x450+300+100")
@@ -43,7 +43,6 @@ class AddPassword(tk.Frame):
 
     def back_home(self):
         self.frame.destroy()
-        print(self.username)
         home.Home(self.master, self.username)
 
     def gen_csv(self):

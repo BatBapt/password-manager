@@ -6,8 +6,6 @@ from apps.database import database
 
 
 class SearchPassword(tk.Frame):
-    app_entry = None
-    pseudo_entry = None
 
     def __init__(self, master, username):
         tk.Frame.__init__(self, master)
@@ -36,6 +34,12 @@ class SearchPassword(tk.Frame):
         self.result_frame = tk.Frame(self.master, width=900, height=200)
         self.result_frame.pack()
 
+        self.app_str = tk.StringVar()
+        self.pseudo_str = tk.StringVar()
+
+        self.app_entry = tk.Entry(self.app_frame, width=30, textvariable=self.app_str)
+        self.pseudo_entry = tk.Entry(self.user_frame, width=30, textvariable=self.pseudo_str)
+
         self.result_label = tk.Label(self.result_frame)
 
         self.frame.bind_all('<Return>', self.search)
@@ -50,7 +54,6 @@ class SearchPassword(tk.Frame):
     def gen_form_search_by_app(self):
         tk.Label(self.app_frame, text="Entrez un site: ").pack(side=tk.TOP, pady=(20, 0), padx=(0, 225))
 
-        self.app_entry = tk.Entry(self.app_frame, width=30)
         self.app_entry.pack(side=tk.TOP, padx=(0, 225))
 
         btn_app = tk.Button(self.app_frame, text="Chercher", width=20, command=self.search)
@@ -59,7 +62,6 @@ class SearchPassword(tk.Frame):
     def gen_form_search_by_user(self):
         tk.Label(self.user_frame, text="Entrez un pseudo: ").pack(side=tk.TOP, pady=(20, 0), padx=(100, 0))
 
-        self.pseudo_entry = tk.Entry(self.user_frame, width=30)
         self.pseudo_entry.pack(side=tk.TOP, padx=(100, 0))
 
         btn_pseudo = tk.Button(self.user_frame, text="Chercher", width=20, command=self.search)
@@ -67,8 +69,8 @@ class SearchPassword(tk.Frame):
 
     def search(self, event=None):
         rows = None
-        app = self.app_entry.get()
-        pseudo = self.pseudo_entry.get()
+        app = self.app_str.get()
+        pseudo = self.pseudo_str.get()
 
         if len(app) == 0 and len(pseudo) > 0:
 

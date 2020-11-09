@@ -39,9 +39,13 @@ class AddPassword(tk.Frame):
         self.file_state = tk.Label(self.csv_frame, text="")
         self.line_state = tk.Label(self.line_frame, text="")
 
-        self.entry_app = tk.Entry(self.line_frame)
-        self.entry_user = tk.Entry(self.line_frame)
-        self.entry_pwd = tk.Entry(self.line_frame, show="*")
+        self.app_str = tk.StringVar()
+        self.user_str = tk.StringVar()
+        self.pwd_str = tk.StringVar()
+
+        self.app_entry = tk.Entry(self.line_frame, textvariable=self.app_str)
+        self.user_entry = tk.Entry(self.line_frame, textvariable=self.user_str)
+        self.pwd_entry = tk.Entry(self.line_frame, show="*", textvariable=self.pwd_str)
 
         self.gen_csv()
         self.gen_inline()
@@ -63,35 +67,29 @@ class AddPassword(tk.Frame):
         self.file_state.pack(side=tk.TOP, padx=(0, 210), pady=(20, 0))
 
     def gen_inline(self):
-        label_inline = tk.Label(self.line_frame, text="Entrer à la main")
-        label_inline.pack(side=tk.TOP, padx=(0, 150))
 
-        label_app = tk.Label(self.line_frame, text="Application: ")
-        label_app.pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
+        tk.Label(self.line_frame, text="Entrer à la main").pack(side=tk.TOP, padx=(0, 150))
 
-        self.entry_app.pack(side=tk.TOP, padx=(0, 150))
+        tk.Label(self.line_frame, text="Application: ").pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
+        self.app_entry.pack(side=tk.TOP, padx=(0, 150))
 
-        label_user = tk.Label(self.line_frame, text="Pseudo: ")
-        label_user.pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
+        tk.Label(self.line_frame, text="Pseudo: ").pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
+        self.user_entry.pack(side=tk.TOP, padx=(0, 150))
 
-        self.entry_user.pack(side=tk.TOP, padx=(0, 150))
-
-        label_pwd = tk.Label(self.line_frame, text="Mot de passe: ")
-        label_pwd.pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
-
-        self.entry_pwd.pack(side=tk.TOP, padx=(0, 150))
+        tk.Label(self.line_frame, text="Mot de passe: ").pack(side=tk.TOP, padx=(0, 150), pady=(20, 0))
+        self.pwd_entry.pack(side=tk.TOP, padx=(0, 150))
 
         btn = tk.Button(self.line_frame, text="Enregistrer le mot de passe", width=40, command=lambda: self.treatment(
-            app=self.entry_app,
-            name=self.entry_user,
-            pwd=self.entry_pwd,
+            app=self.app_str,
+            name=self.user_str,
+            pwd=self.pwd_str,
         ))
         btn.pack(side=tk.TOP, padx=(0, 150), pady=(20, 20))
 
         self.line_frame.bind_all('<Return>', lambda event: self.treatment(
-            app=self.entry_app,
-            name=self.entry_user,
-            pwd=self.entry_pwd,
+            app=self.app_str,
+            name=self.user_str,
+            pwd=self.pwd_str,
         ))
 
     def treatment(self, event=None, **kwargs):
@@ -140,10 +138,9 @@ class AddPassword(tk.Frame):
                 self.line_state.configure(text="Mot de passe enregistrée")
                 self.line_state.pack(side=tk.TOP, padx=(0, 150), pady=(20, 20))
 
-                self.entry_app.delete(0, 'end')
-                self.entry_user.delete(0, 'end')
-                self.entry_pwd.delete(0, 'end')
-
+                self.app_entry.delete(0, 'end')
+                self.user_entry.delete(0, 'end')
+                self.pwd_entry.delete(0, 'end')
 
 
 if __name__ == '__main__':

@@ -31,24 +31,23 @@ class Login(tk.Frame):
         self.login_window()
 
     def login_window(self):
+        user_str = tk.StringVar()
+        pwd_str = tk.StringVar()
+
         info_label = tk.Label(self.login_frame, text="Vous devez vous connecter pour voir vos mots de passe")
         info_label.pack(padx=5, pady=15, side=tk.TOP)
 
-        user_label = tk.Label(self.login_frame, text="Nom d'utilisateur")
-        user_label.pack(pady=0)
-        user_entry = tk.Entry(self.login_frame, width=50)
-        user_entry.pack(ipady=2, pady=10)
+        tk.Label(self.login_frame, text="Nom d'utilisateur").pack(pady=0)
+        tk.Entry(self.login_frame, width=50, textvariable=user_str).pack(ipady=2, pady=10)
 
-        pwd_label = tk.Label(self.login_frame, text="Mot de passe")
-        pwd_label.pack(pady=10)
-        pwd_entry = tk.Entry(self.login_frame, width=50, show="*")
-        pwd_entry.pack(ipady=2, pady=10)
+        tk.Label(self.login_frame, text="Mot de passe").pack(pady=10)
+        tk.Entry(self.login_frame, width=50, show="*", textvariable=pwd_str).pack(ipady=2, pady=10)
 
         connect_button = tk.Button(self.login_frame, text="Se connecter", command=lambda: self.connect(
-            user=user_entry, pwd=pwd_entry
+            user=user_str, pwd=pwd_str
         ))
         connect_button.pack()
-        self.login_frame.bind_all("<Return>", lambda event: self.connect(user=user_entry, pwd=pwd_entry))
+        self.login_frame.bind_all("<Return>", lambda event: self.connect(user=user_str, pwd=pwd_str))
 
     def connect(self, event=None, **kwargs):
         user = kwargs["user"].get()

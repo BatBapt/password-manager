@@ -21,33 +21,31 @@ class NewUser(tk.Frame):
         self.main_frame = tk.Frame(self.master, width=900, height=450)
         self.main_frame.pack()
 
-        self.username_entry = tk.Entry(self.main_frame)
-        self.password_entry = tk.Entry(self.main_frame, show="*")
+        self.error_lab = tk.Label(self.master, text="")
 
         self.gen_form()
 
     def gen_form(self):
-        username_label = tk.Label(self.main_frame, text="Nom d'utilisateur: ")
-        username_label.pack(side=tk.TOP, pady=(25, 0))
+        user_str = tk.StringVar()
+        pwd_str = tk.StringVar()
 
-        self.username_entry["width"] = 30
-        self.username_entry.pack(side=tk.TOP)
+        tk.Label(self.main_frame, text="Nom d'utilisateur: ").pack(side=tk.TOP, pady=(25, 0))
 
-        password_label = tk.Label(self.main_frame, text="Mot de passe: ")
-        password_label.pack(side=tk.TOP, pady=(25, 0))
+        tk.Entry(self.main_frame, width=30, textvariable=user_str).pack(side=tk.TOP)
 
-        self.password_entry['width'] = 30
-        self.password_entry.pack(side=tk.TOP)
+        tk.Label(self.main_frame, text="Mot de passe: ").pack(side=tk.TOP, pady=(25, 0))
+
+        tk.Entry(self.main_frame, show="*", width=30, textvariable=pwd_str).pack(side=tk.TOP)
 
         btn = tk.Button(self.main_frame, text="S'inscrire", width=45, command=lambda: self.signup(
-            user=self.username_entry,
-            pwd=self.password_entry,
+            user=user_str,
+            pwd=pwd_str,
         ))
         btn.pack(side=tk.TOP, pady=(30, 30))
 
         self.main_frame.bind_all('<Return>', lambda event: self.signup(
-            user=self.username_entry,
-            pwd=self.password_entry,
+            user=user_str,
+            pwd=pwd_str,
         ))
 
     def signup(self, event=None, **kwargs):
@@ -58,10 +56,9 @@ class NewUser(tk.Frame):
             self.database.add_user([user, pwd])
             messagebox.showinfo("Inscription réussis", "Votre inscription est enregistré. Veuillez vous connecter")
             login.Login(self.master)
-
-
-
-
+        else:
+            self.error_lab["text"] = "Un des champs est manquant"
+            self.error_lab.pack(side=tk.TOP)
 
 
 if __name__ == "__main__":

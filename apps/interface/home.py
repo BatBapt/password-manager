@@ -1,3 +1,5 @@
+import sys
+
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
@@ -20,9 +22,10 @@ class Home(tk.Frame):
         for widget in self.master.winfo_children():
             widget.destroy()
 
-        self.username = username
         self.database = database.Database("password.db")
-        self.username = self.database.print_by_user(self.username)
+        self.username = self.database.print_by_user(username)
+        if not self.username:
+            sys.exit(-1)
         self.pseudo = self.username[1]
 
         tk.Frame.__init__(self, master)
